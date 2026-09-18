@@ -426,12 +426,24 @@
             var delBtn = document.createElement("button");
             delBtn.className = "icon-btn"; delBtn.type = "button"; delBtn.innerHTML = "&#10005;";
             delBtn.title = "Remove subject";
+            delBtn.dataset.confirming = "0";
+            var confirmTimer = null;
             delBtn.addEventListener("click", function () {
-                if (confirm('Remove "' + s.name + '" from the schedule?')) {
+                if (delBtn.dataset.confirming === "1") {
+                    if (confirmTimer) clearTimeout(confirmTimer);
                     subjects = subjects.filter(function (x) { return x.id !== s.id; });
                     commitSubjects();
                     renderSubjectPanel();
                     fullRenderTable();
+                } else {
+                    delBtn.dataset.confirming = "1";
+                    delBtn.classList.add("confirm");
+                    delBtn.textContent = "Sure? tap again";
+                    confirmTimer = setTimeout(function () {
+                        delBtn.dataset.confirming = "0";
+                        delBtn.classList.remove("confirm");
+                        delBtn.innerHTML = "&#10005;";
+                    }, 3000);
                 }
             });
 
@@ -449,7 +461,7 @@
     function renderTopics() {
         var shell = document.getElementById("topicsShell");
         var hint = document.getElementById("topicsEmptyHint");
-        if (subjects.length === 0) {
+        if (subjectHoursSubjects().length === 0) {
             shell.style.display = "none";
             hint.style.display = "block";
             return;
@@ -466,7 +478,8 @@
         while (headRow.children.length > 2) headRow.removeChild(headRow.lastChild);
         while (barRow.children.length > 2) barRow.removeChild(barRow.lastChild);
 
-        subjects.forEach(function (s) {
+        var topicSubjects = subjectHoursSubjects();
+        topicSubjects.forEach(function (s) {
             var th = document.createElement("th");
             th.textContent = s.name;
             headRow.appendChild(th);
@@ -474,7 +487,7 @@
 
         var bar = document.createElement("th");
         bar.textContent = "Topics Covered";
-        bar.colSpan = subjects.length;
+        bar.colSpan = topicSubjects.length;
         barRow.appendChild(bar);
     }
 
@@ -483,6 +496,7 @@
         tbody.innerHTML = "";
         var n = daysInMonth(current);
         var y = current.getFullYear(), m = current.getMonth();
+        var topicSubjects = subjectHoursSubjects();
 
         for (var day = 1; day <= n; day++) {
             var key = dateKey(y, m, day);
@@ -504,7 +518,7 @@
             tdDate.textContent = pad(day);
             tr.appendChild(tdDate);
 
-            subjects.forEach(function (s) {
+            topicSubjects.forEach(function (s) {
                 var td = document.createElement("td");
                 td.className = "col-topic";
                 var input = document.createElement("input");
@@ -534,6 +548,7 @@
         renderFoot();
         renderStats();
         renderTopics();
+        syncStickyOffsets();
     }
 
     document.getElementById("addSubjectBtn").addEventListener("click", function () {
@@ -569,12 +584,24 @@
         goToMonth(new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, 1));
     });
 
+    function syncStickyOffsets() {
+        ["schedTable", "topicsTable"].forEach(function (id) {
+            var table = document.getElementById(id);
+            if (!table) return;
+            var dayTh = table.querySelector("thead th.col-day");
+            if (!dayTh) return;
+            var w = dayTh.getBoundingClientRect().width;
+            if (w > 0) table.style.setProperty("--day-w", w + "px");
+        });
+    }
+
     function fullRenderTable() {
         renderTableHead();
         renderTableBody();
         renderFoot();
         renderStats();
         renderTopics();
+        syncStickyOffsets();
     }
 
     // ---------- init ----------
@@ -589,5 +616,11 @@
     renderMonthJump();
     updateNavButtons();
     startClock();
+
+    var resizeTimer = null;
+    window.addEventListener("resize", function () {
+        if (resizeTimer) clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(syncStickyOffsets, 150);
+    });
 
 })();
