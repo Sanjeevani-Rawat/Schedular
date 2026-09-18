@@ -1,0 +1,97 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Scheduler</title>
+<link rel="stylesheet" href="style.css">
+<script src="script.js" defer></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hero">
+    <div class="hero-title">
+      <h1>Scheduler</h1>
+    </div>
+    <div class="month-nav-wrap">
+      <div class="now-clock" id="nowClock"></div>
+      <div class="month-nav">
+        <button id="prevMonth" aria-label="Previous month">&#8249;</button>
+        <div class="month-label" id="monthLabel">September 2026</div>
+        <button id="nextMonth" aria-label="Next month">&#8250;</button>
+        <select class="month-jump" id="monthJump" title="Jump to a month"></select>
+      </div>
+    </div>
+  </header>
+
+  <div class="stats" id="statStrip"></div>
+
+  <div class="panel" id="subjectPanel">
+    <div class="panel-head" id="subjectPanelHead">
+      <h2><span class="chev">&#9656;</span> Subjects &amp; time slots</h2>
+      <span style="font-size:11.5px;color:var(--ink-faint);" id="subjCount"></span>
+    </div>
+    <div class="panel-body">
+      <div class="subj-head-row">
+        <span class="field-label">Subject / task</span>
+        <span class="field-label">Time slot</span>
+        <span class="field-label">Target hrs/day</span>
+        <span class="field-label">Track as</span>
+        <span></span>
+      </div>
+      <div id="subjectList"></div>
+      <button class="add-subject-btn" id="addSubjectBtn">+ Add subject</button>
+    </div>
+  </div>
+
+  <div class="table-shell">
+    <div class="table-scroll">
+      <table class="sched" id="schedTable">
+        <thead>
+          <tr>
+            <th class="col-day">Day</th>
+            <th class="col-date">Date</th>
+          </tr>
+          <tr class="sub">
+            <th class="col-day"></th>
+            <th class="col-date"></th>
+          </tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
+        <tfoot id="tableFoot"></tfoot>
+      </table>
+    </div>
+  </div>
+
+  <h2 class="section-title">Topics Covered</h2>
+  <div class="table-shell" id="topicsShell">
+    <div class="table-scroll">
+      <table class="sched topics-table" id="topicsTable">
+        <thead>
+          <tr id="topicsHeadRow">
+            <th class="col-day">Day</th>
+            <th class="col-date">Date</th>
+          </tr>
+          <tr class="sub topics-bar-row" id="topicsBarRow">
+            <th class="col-day"></th>
+            <th class="col-date"></th>
+          </tr>
+        </thead>
+        <tbody id="topicsBody"></tbody>
+      </table>
+    </div>
+  </div>
+  <div id="topicsEmptyHint" style="display:none;">Add subjects above, and this section will fill in with a matching column for each one.</div>
+
+  <footer class="note">Saved automatically in this browser, one record per month. Switch months with the arrows above.</footer>
+</div>
+
+
+</body>
+</html>
