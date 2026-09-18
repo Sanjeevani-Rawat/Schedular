@@ -276,11 +276,21 @@ select.month-jump {
     font-size: 15px;
     padding: 6px;
     border-radius: 6px;
+    white-space: nowrap;
 }
 
 .icon-btn:hover {
     color: var(--alert);
     background: var(--alert-soft);
+}
+
+.icon-btn.confirm {
+    color: var(--alert);
+    background: var(--alert-soft);
+    font-size: 12px;
+    font-weight: 600;
+    padding: 8px 10px;
+    width: 100%;
 }
 
 .add-subject-btn {
@@ -327,7 +337,16 @@ select.month-jump {
 }
 
 .table-scroll {
-    overflow-x: auto;
+    overflow: auto;
+    max-height: 65vh;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.table-scroll::-webkit-scrollbar {
+    display: none;
+    width: 0;
+    height: 0;
 }
 
 table.sched {
@@ -355,14 +374,17 @@ table.sched thead th {
     padding: 9px 10px;
     font-weight: 600;
     font-size: 12px;
+    height: 40px;
 }
 
-table.sched thead tr.sub th {
+#schedSubRow th {
     font-weight: 400;
     color: var(--ink-soft);
     font-size: 11px;
     padding: 3px 10px 8px;
     font-variant-numeric: tabular-nums;
+    top: 40px;
+    height: 32px;
 }
 
 th.col-day,
@@ -378,7 +400,7 @@ td.col-date {
 
 th.col-date,
 td.col-date {
-    left: 56px;
+    left: var(--day-w, 56px);
     min-width: 78px;
 }
 
@@ -564,18 +586,15 @@ tfoot td.col-date {
     margin: 30px 0 12px;
 }
 
-.topics-bar-row th {
+#topicsBarRow th {
     background: var(--accent);
     color: var(--surface);
     font-weight: 600;
     font-size: 12.5px;
     padding: 7px 10px;
     text-align: center;
-}
-
-.topics-bar-row th.col-day,
-.topics-bar-row th.col-date {
-    background: var(--accent);
+    top: 40px;
+    height: 32px;
 }
 
 td.col-topic {
