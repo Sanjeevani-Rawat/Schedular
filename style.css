@@ -38,7 +38,7 @@ body {
     font-family: var(--font-body);
     -webkit-font-smoothing: antialiased;
     min-height: 100vh;
-    padding: 28px 20px 80px;
+    padding: 10px 20px 80px;
 }
 
 .wrap {
@@ -47,6 +47,19 @@ body {
 }
 
 /* ---------- Header ---------- */
+.quote-bar {
+    text-align: center;
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 14px;
+    color: var(--accent-ink);
+    background: var(--accent-soft);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 10px 18px;
+    margin-bottom: 18px;
+}
+
 header.hero {
     display: flex;
     flex-wrap: wrap;
@@ -61,8 +74,10 @@ header.hero {
 .hero-title {
     display: flex;
     align-items: baseline;
-    gap: 14px;
+    gap: 12px;
     flex-wrap: wrap;
+    flex: 1 1 auto;
+    min-width: 0;
 }
 
 .hero-title h1 {
@@ -75,13 +90,37 @@ header.hero {
     line-height: 0.95;
 }
 
-.hero-title .tag {
-    font-size: 13px;
+.greeting-group {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    flex: 1 1 auto;
+}
+
+.greeting-text {
+    font-family: var(--font-display);
+    font-size: 18px;
+    font-weight: 600;
+    font-style: italic;
+    color: var(--accent-ink);
+}
+
+.day-message {
+    font-family: var(--font-display);
+    font-size: 16px;
+    font-weight: 500;
+    font-style: italic;
     color: var(--ink-soft);
-    border-left: 2px solid var(--line);
-    padding-left: 14px;
-    max-width: 260px;
-    line-height: 1.4;
+}
+
+.day-message::before {
+    content: "\00b7";
+    margin-right: 12px;
+    color: var(--line);
+    font-style: normal;
+    font-weight: 400;
 }
 
 .month-nav {
@@ -584,6 +623,7 @@ tfoot td.col-date {
     font-style: italic;
     font-size: 24px;
     margin: 30px 0 12px;
+    text-align: center;
 }
 
 #topicsBarRow th {
@@ -642,7 +682,7 @@ footer.note {
         padding: 18px 10px 60px;
     }
 
-    .hero-title .tag {
+    .day-message {
         display: none;
     }
 
