@@ -94,6 +94,55 @@
         document.getElementById("monthLabel").textContent = MONTH_NAMES[current.getMonth()] + " " + current.getFullYear();
     }
 
+    var DAY_MESSAGES = [
+        "Sunday Funday!",                     // 0 Sun
+        "Hope you had a great weekend!",      // 1 Mon
+        "Happy Taco-Tuesday!",                // 2 Tue
+        "Happy Hump-day!",                    // 3 Wed
+        "Happy Thursday!",                    // 4 Thu
+        "Happy Friday!",                      // 5 Fri
+        "Saturyay!"                           // 6 Sat
+    ];
+
+    var THOUGHTS = [
+        { text: "Small steps every day add up to big results.", emoji: "\ud83c\udf31" },
+        { text: "You don't have to be perfect, just consistent.", emoji: "\ud83d\udd01" },
+        { text: "Progress, not perfection.", emoji: "\ud83d\udcc8" },
+        { text: "One focused hour beats three distracted ones.", emoji: "\u23f1\ufe0f" },
+        { text: "Today's effort is tomorrow's confidence.", emoji: "\ud83d\udcaa" },
+        { text: "Discipline is choosing what you want most over what you want right now.", emoji: "\ud83c\udfaf" },
+        { text: "Every rep counts, even the messy ones.", emoji: "\u270d\ufe0f" },
+        { text: "You're closer than you were yesterday.", emoji: "\ud83d\ude80" },
+        { text: "Rest is part of the plan, not a break from it.", emoji: "\ud83c\udf19" },
+        { text: "Trust the process, log the hours.", emoji: "\u23f3" },
+        { text: "Small wins compound into big results.", emoji: "\ud83d\udcb0" },
+        { text: "Show up for yourself today.", emoji: "\u2728" },
+        { text: "Consistency beats intensity.", emoji: "\ud83d\udd25" },
+        { text: "Your future self is watching \u2014 make them proud.", emoji: "\ud83d\udc40" },
+        { text: "Growth happens on the quiet, repeated days.", emoji: "\ud83c\udf3f" },
+        { text: "Keep going. You're building something real.", emoji: "\ud83c\udfd7\ufe0f" },
+        { text: "One page, one problem, one step at a time.", emoji: "\ud83d\udcda" },
+        { text: "Bad days don't erase good streaks.", emoji: "\ud83c\udf08" },
+        { text: "You showed up. That's the hard part, done.", emoji: "\u2705" }
+    ];
+
+    function updateGreeting() {
+        var now = new Date();
+        var h = now.getHours();
+        var greeting = h < 12 ? "Good Morning" : (h < 17 ? "Good Afternoon" : "Good Evening");
+        var gEl = document.getElementById("greetingText");
+        if (gEl) gEl.textContent = greeting;
+        var dEl = document.getElementById("dayMessage");
+        if (dEl) dEl.textContent = DAY_MESSAGES[now.getDay()];
+    }
+
+    function renderQuote() {
+        var el = document.getElementById("quoteBar");
+        if (!el) return;
+        var t = THOUGHTS[Math.floor(Math.random() * THOUGHTS.length)];
+        el.textContent = t.text + " " + t.emoji;
+    }
+
     function updateClock() {
         var now = new Date();
         var days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
@@ -104,6 +153,7 @@
         var timeStr = h12 + ":" + mnt + ":" + sec + " " + ampm;
         var el = document.getElementById("nowClock");
         if (el) el.textContent = dateStr + " \u00b7 " + timeStr;
+        updateGreeting();
     }
     function startClock() {
         updateClock();
@@ -604,6 +654,24 @@
         syncStickyOffsets();
     }
 
+    function scrollRowIntoView(row) {
+        var container = row.closest(".table-scroll");
+        if (!container) return;
+        var containerRect = container.getBoundingClientRect();
+        var rowRect = row.getBoundingClientRect();
+        var offset = (rowRect.top - containerRect.top) + container.scrollTop - (container.clientHeight / 2) + (rowRect.height / 2);
+        container.scrollTop = Math.max(0, offset);
+    }
+
+    function scrollToToday() {
+        ["tableBody", "topicsBody"].forEach(function (id) {
+            var body = document.getElementById(id);
+            if (!body) return;
+            var row = body.querySelector("tr.today");
+            if (row) scrollRowIntoView(row);
+        });
+    }
+
     // ---------- init ----------
 
     loadSubjects();
@@ -611,11 +679,13 @@
     ensureMonthIndexed();
     renderMonthLabel();
     renderSubjectPanel();
-    if (subjects.length === 0) { document.getElementById("subjectPanel").classList.add("open"); }
     fullRenderTable();
     renderMonthJump();
     updateNavButtons();
     startClock();
+    renderQuote();
+
+    setTimeout(scrollToToday, 60);
 
     var resizeTimer = null;
     window.addEventListener("resize", function () {
